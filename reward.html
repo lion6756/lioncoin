@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balance Page</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+        .loading-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('material/images/re.gif') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .loading-container h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+        .spinner {
+            border: 8px solid rgba(255, 255, 255, 0.1);
+            border-left: 8px solid #003cff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-top: 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="loading-container">
+        <div>
+            <h1>Checking balance...</h1>
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        window.onload = async function() {
+            // Import Firebase SDKs
+            const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js");
+            const { getDatabase, ref, get, set, update } = await import("https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js");
+
+            // Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyAWbroI9JavfbaG10sTD3eCDyoWt59_fLU",
+                authDomain: "lion-3e020.firebaseapp.com",
+                databaseURL: "https://lion-3e020-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "lion-3e020",
+                storageBucket: "lion-3e020.appspot.com",
+                messagingSenderId: "123456789012",
+                appId: "1:123456789012:web:abcdef123456",
+                measurementId: "G-ABC123XYZ"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+
+            // Set default user ID if not set in sessionStorage
+            const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    let userTId = tg.initDataUnsafe?.user?.id;
+    if (!userTId) {
+        console.warn("User ID not found. Using default ID: 5522204563");
+        userTId = "5522204563"; // Default ID
+    }
+
+            const defaultUserId = userTId;
+            let userId = sessionStorage.getItem('userId');
+            if (!userId) {
+                userId = defaultUserId; // Set default user ID if none exists
+                sessionStorage.setItem('userId', userId);
+            }
+
+            // Reward amount
+            const reward = 300;
+
+            // Function to check user in database and update or create
+            async function checkAndUpdateBalance() {
+                try {
+                    const userRef = ref(database, `users/${userId}`);
+                    const snapshot = await get(userRef);
+
+                    if (snapshot.exists()) {
+                        // User exists - update balance
+                        const userData = snapshot.val();
+                        const newBalance = (userData.balance || 0) + reward;
+                        await update(userRef, { balance: newBalance });
+                        alert(`Balance updated! New Balance: ${newBalance} 🦁`);
+                    } else {
+                        // User does not exist - create new entry
+                        await set(userRef, { balance: reward });
+                        alert(`New user created! Balance: ${reward} 🦁`);
+                    }
+                } catch (error) {
+                    console.error('Error updating balance:', error);
+                    alert('Failed to update balance. Please try again.');
+                }
+
+                // Redirect after processing
+                window.location.href = 'home.html';
+            }
+
+            // Call the function
+            await checkAndUpdateBalance();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Tasks</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="material/css/styles.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+    <script src="material/js/balance.js"></script>
+    <script src="material/js/dailyRewards.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #000; 
+            color: #fff; 
+            margin: 0;
+            padding: 0;
+        }
+
+        #balance-container {
+            margin: 20px;
+            font-size: 18px;
+            background: linear-gradient(45deg, #1a1a1a, #2d2d2d);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #balance-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 193, 7, 0.2), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        #balance {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffc107;
+            text-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+            display: inline-block;
+            animation: balancePulse 2s infinite;
+        }
+
+        @keyframes balancePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .lion-icon {
+            font-size: 24px;
+            margin-left: 5px;
+            display: inline-block;
+            animation: lionBounce 2s infinite;
+        }
+
+        @keyframes lionBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .total-lion-text {
+            background: linear-gradient(45deg, #ffc107, #ff9800);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        .task-container {
+            margin: 10px auto;
+            max-width: 600px;
+        }
+
+        .task {
+            margin: 10px auto;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #000000; 
+            border-radius: 12px;
+            background-color: #333030; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            width: 80%;
+        }
+
+        .task:hover {
+            transform: translateY(-5px);
+        }
+
+        .task-detail {
+            display: flex;
+            align-items: center;
+        }
+
+        .task-image img {
+            border-radius: 8px;
+            margin-right: 10px;
+        }
+
+        .task h4 {
+            margin: 0;
+            font-size: 18px;
+            color: #f2f2f2;
+        }
+
+        .task-data {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .task-data img {
+            margin-right: 5px;
+        }
+
+        .task-data h5 {
+            margin: 0;
+            color: #069129d2;
+            font-size: 18px;
+        }
+
+        .claim-rewards-btn {
+            background: linear-gradient(45deg, #FF4E50, #F9D423);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 10px rgba(255, 78, 80, 0.4);
+        }
+
+        .claim-rewards-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 78, 80, 0.6);
+        }
+
+        .claim-rewards-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shine-effect 2s infinite;
+        }
+
+        @keyframes shine-effect {
+            0% {
+                left: -100%;
+            }
+            20% {
+                left: 100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        .claim-rewards-btn:active {
+            transform: scale(0.95);
+        }
+
+        .task-button {
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+
+        .task h4 {
+            font-size: 16px;
+        }
+
+        .balance-display {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .current-balance {
+            font-size: 48px;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            margin-bottom: 5px;
+        }
+
+        .rewards-info {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .rewards-label {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .rewards-value {
+            font-size: 24px;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .total-lion-text {
+            background: linear-gradient(45deg, #ffc107, #ff9800);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 5px;
+        }
+
+        .daily-rewards-container {
+            padding: 20px;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
+        .daily-rewards-card {
+            background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .daily-rewards-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            animation: rotateGradient 10s linear infinite;
+        }
+
+        @keyframes rotateGradient {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .reward-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .reward-logo {
+            width: 40px;
+            height: 40px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .reward-amount {
+            font-size: 48px;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            margin: 20px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .claim-timer {
+            color: #888;
+            font-size: 16px;
+            margin: 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .claim-button {
+            background: linear-gradient(45deg, #ffd700, #ff9900);
+            border: none;
+            border-radius: 25px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #1a1a1a;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .claim-button:disabled {
+            background: #444;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .claim-button:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .claim-button:not(:disabled):active {
+            transform: translateY(0);
+        }
+
+        .claim-button .lion-icon {
+            font-size: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .reward-claimed {
+            animation: claimAnimation 0.5s ease-out;
+        }
+
+        @keyframes claimAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .coins-animation {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .coin {
+            position: absolute;
+            font-size: 24px;
+            animation: coinFall 1s ease-out forwards;
+        }
+
+        @keyframes coinFall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Daily Rewards 3D Styles */
+        .daily-rewards-container {
+            perspective: 1000px;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+
+        .rewards-card {
+            background: linear-gradient(135deg, #2c3e50, #3498db, #2ecc71);
+            border-radius: 20px;
+            padding: 20px;
+            transform-style: preserve-3d;
+            position: relative;
+            transform: rotateX(10deg);
+            transition: transform 0.5s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: floatCard 3s ease-in-out infinite;
+        }
+
+        @keyframes floatCard {
+            0%, 100% { transform: rotateX(10deg) translateY(0); }
+            50% { transform: rotateX(10deg) translateY(-20px); }
+        }
+
+        .rewards-card:hover {
+            transform: rotateX(0deg) scale(1.05);
+        }
+
+        .rewards-title {
+            font-size: 24px;
+            color: #0e0d0d;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            transform: translateZ(50px);
+        }
+
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .reward-day {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px 5px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: rewardPulse 2s infinite;
+        }
+
+        .reward-day .status-mark {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transform: translateZ(60px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .reward-day.claimed .status-mark {
+            background: #2ecc71;
+            opacity: 1;
+            content: "✓";
+        }
+
+        .reward-day.missed .status-mark {
+            background: #f52109d2;
+            opacity: 1;
+            content: "✗";
+        }
+
+        .reward-day.claimed {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            pointer-events: none;
+        }
+
+        .reward-day.missed {
+            background: linear-gradient(45deg, #c0392b, #e74c3c);
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .reward-day.active {
+            background: linear-gradient(45deg, #f1c40f, #f39c12);
+            animation: activePulse 1.5s infinite;
+        }
+
+        .reward-day.locked {
+            background: rgba(255, 255, 255, 0.05);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .reward-day:not(.locked):not(.claimed):not(.missed):hover {
+            transform: translateZ(20px) scale(1.1);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .claim-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #2ecc71;
+            opacity: 0;
+            transform: translateZ(100px);
+            pointer-events: none;
+        }
+
+        @keyframes claimMark {
+            0% { transform: translateZ(100px) scale(0); opacity: 0; }
+            50% { transform: translateZ(100px) scale(1.2); opacity: 1; }
+            100% { transform: translateZ(100px) scale(1); opacity: 0; }
+        }
+
+        .reward-amount {
+            font-size: 16px;
+            color: #050505;
+            font-weight: bold;
+            margin-top: 5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            transform: translateZ(30px);
+        }
+
+        .reward-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+            position: relative;
+            transform: translateZ(40px);
+            animation: spinCoin 4s infinite linear;
+        }
+
+        @keyframes spinCoin {
+            0% { transform: translateZ(40px) rotateY(0deg); }
+            100% { transform: translateZ(40px) rotateY(360deg); }
+        }
+
+        .claim-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+            opacity: 0;
+            pointer-events: none;
+            animation: claimEffect 1s ease-out;
+        }
+
+        @keyframes claimEffect {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+        }
+
+        /* Community Button Animation */
+        .community-btn {
+            display: inline-block;
+            padding: 8px 15px;
+            width: auto;
+            background: linear-gradient(45deg, #0088cc, #00a2ff);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 136, 204, 0.4);
+            z-index: 1000;
+            cursor: move; /* Show move cursor */
+            user-select: none; /* Prevent text selection while dragging */
+            touch-action: none; /* Prevent scrolling on touch devices */
+        }
+
+        .community-btn i {
+            margin-right: 6px;
+            font-size: 16px;
+        }
+
+        .community-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 136, 204, 0.6);
+        }
+    </style>
+</head>
+<script>
+    
+     const tg = window.Telegram.WebApp;
+
+    tg.expand();
+
+
+    let userTId = tg.initDataUnsafe?.user?.id;
+    if (!userTId) {
+        console.warn("User ID not found. Using default ID: 5522204563");
+        userTId = "5522204563"; // Default ID
+    }
+</script>
+<body>
+    <div class="daily-rewards-container">
+        <div class="rewards-card">
+            <h2 class="rewards-title">Daily Rewards</h2>
+            <div class="rewards-grid">
+                <div class="reward-day" onclick="claimDailyReward(1)">
+                    <div class="reward-icon">🪙</div>
+                    <div class="reward-amount">50</div>
+                    <div class="day-label">Day 1</div>
+                    <div class="status-mark"></div>
+                </div>
+                <div class="reward-day" onclick="claimDailyReward(2)">
+                    <div class="reward-icon">🪙</div>
+                    <div class="reward-amount">100</div>
+                    <div class="day-label">Day 2</div>
+                    <div class="status-mark"></div>
+                </div>
+                <div class="reward-day" onclick="claimDailyReward(3)">
+                    <div class="reward-icon">🪙</div>
+                    <div class="reward-amount">150</div>
+                    <div class="day-label">Day 3</div>
+                    <div class="status-mark"></div>
+                </div>
+                <div class="reward-day" onclick="claimDailyReward(4)">
+                    <div class="reward-icon">🪙</div>
+                    <div class="reward-amount">200</div>
+                    <div class="day-label">Day 4</div>
+                    <div class="status-mark"></div>
+                </div>
+                <div class="reward-day" onclick="claimDailyReward(5)">
+                    <div class="reward-icon">🪙</div>
+                    <div class="reward-amount">250</div>
+                    <div class="day-label">Day 5</div>
+                    <div class="status-mark"></div>
+                </div>
+                <div class="reward-day" onclick="claimDailyReward(6)">
+                    <div class="reward-icon">🪙</div>
+                    <div class="reward-amount">300</div>
+                    <div class="day-label">Day 6</div>
+                    <div class="status-mark"></div>
+                </div>
+                <div class="reward-day" onclick="claimDailyReward(7)">
+                    <div class="reward-icon">👑</div>
+                    <div class="reward-amount">500</div>
+                    <div class="day-label">Day 7</div>
+                    <div class="status-mark"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br><br>
+          
+
+                <div class="task-image">
+                <img src="material/images/logo.png" width="80%">
+
+               
+
+                <nav class="bottom-nav">
+            <a href="home.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>HOME</span>
+            </a>
+            <a href="leaderboard.html" class="nav-item">
+                <i class="fas fa-trophy"></i>
+                <span>LEADERBOARD</span>
+            </a>
+            <a href="invite-friends.html" class="nav-item">
+                <i class="fas fa-user-friends"></i>
+                <span>FRIENDS</span>
+            </a>
+            <a href="task.html" class="nav-item">
+                <i class="fas fa-tasks"></i>
+                <span>TASKS</span>
+            </a>
+            <a href="balance.html" class="nav-item">
+                <i class="fas fa-wallet"></i>
+                <span>BALANCE</span>
+            </a>
+        </nav>
+
+    <script src="material/js/js.js"></script>
+    <script src="material/js/main.js"></script>
+    <script>
+       // Complete Task Function
+function completeTask() {
+    // Save the task session in local storage
+    sessionStorage.setItem('taskCompleted', 'true');
+    sessionStorage.setItem('reward', '300');
+    
+    // Redirect to the balance page or any other page
+    window.location.href = 'reward.html';
+}
+
+// Verify Task Function
+function verifyTask() {
+    // Save the task session in local storage
+    sessionStorage.setItem('taskCompleted', 'true');
+    sessionStorage.setItem('reward', '200');
+    
+    // Redirect to the balance page or any other page
+    window.location.href = 'verify.html';
+}
+
+let currentDay = 1;
+let lastClaimDate = null;
+const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
+
+function initializeDailyRewards() {
+    const today = new Date();
+    const rewardDays = document.querySelectorAll('.reward-day');
+    
+    // Load saved state from localStorage
+    const savedState = JSON.parse(localStorage.getItem('dailyRewardsState') || '{}');
+    lastClaimDate = savedState.lastClaimDate ? new Date(savedState.lastClaimDate) : null;
+    currentDay = savedState.currentDay || 1;
+
+    rewardDays.forEach((day, index) => {
+        const dayNum = index + 1;
+        
+        if (dayNum < currentDay) {
+            if (savedState[`day${dayNum}`] === 'claimed') {
+                markAsClaimed(day);
+            } else {
+                markAsMissed(day);
+            }
+        } else if (dayNum > currentDay) {
+            day.classList.add('locked');
+        } else if (dayNum === currentDay) {
+            if (canClaimToday()) {
+                day.classList.add('active');
+            } else {
+                day.classList.add('locked');
+            }
+        }
+
+        // Add status mark element
+        const statusMark = document.createElement('div');
+        statusMark.className = 'status-mark';
+        day.appendChild(statusMark);
+    });
+}
+
+function canClaimToday() {
+    if (!lastClaimDate) return true;
+    
+    const today = new Date();
+    const timeDiff = today - lastClaimDate;
+    return timeDiff >= MILLISECONDS_PER_DAY;
+}
+
+function claimDailyReward(day) {
+    const rewardDay = document.querySelector(`.reward-day:nth-child(${day})`);
+        
+    if (rewardDay.classList.contains('locked') || 
+        rewardDay.classList.contains('claimed') || 
+        rewardDay.classList.contains('missed')) {
+        return;
+    }
+
+    if (day !== currentDay) {
+        return;
+    }
+
+    if (!canClaimToday()) {
+        return;
+    }
+
+    // Create claim animation
+    const claimAnim = document.createElement('div');
+    claimAnim.className = 'claim-animation';
+    claimAnim.textContent = '✓';
+    rewardDay.appendChild(claimAnim);
+
+    // Animate the claim
+    claimAnim.style.animation = 'claimMark 1s forwards';
+
+    // Mark as claimed
+    markAsClaimed(rewardDay);
+
+    // Update state
+    lastClaimDate = new Date();
+    currentDay++;
+
+    // Save state to localStorage
+    const savedState = JSON.parse(localStorage.getItem('dailyRewardsState') || '{}');
+    savedState.lastClaimDate = lastClaimDate.toISOString();
+    savedState.currentDay = currentDay;
+    savedState[`day${day}`] = 'claimed';
+    localStorage.setItem('dailyRewardsState', JSON.stringify(savedState));
+
+    // Update next day status
+    if (currentDay <= 7) {
+        const nextDay = document.querySelector(`.reward-day:nth-child(${currentDay})`);
+        if (nextDay) {
+            nextDay.classList.remove('locked');
+            nextDay.classList.add('active');
+        }
+    }
+
+    // Add reward to user's balance
+    const rewardAmount = parseInt(rewardDay.querySelector('.reward-amount').textContent);
+    updateBalance(rewardAmount);
+}
+
+function markAsClaimed(element) {
+    element.classList.remove('active', 'locked');
+    element.classList.add('claimed');
+    const statusMark = element.querySelector('.status-mark');
+    statusMark.textContent = '✓';
+}
+
+function markAsMissed(element) {
+    element.classList.remove('active', 'locked');
+    element.classList.add('missed');
+    const statusMark = element.querySelector('.status-mark');
+    statusMark.textContent = '✗';
+}
+
+// Initialize rewards on page load
+document.addEventListener('DOMContentLoaded', initializeDailyRewards);
+    </script>
+
+    <a href="https://t.me/Liontokenmeme" class="community-btn">
+        <i class="fab fa-telegram"></i> Join Our Community
+    </a>
+
+    <script>
+        // Draggable functionality for community button
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.querySelector('.community-btn');
+            let isDragging = false;
+            let currentX;
+            let currentY;
+            let initialX;
+            let initialY;
+            let xOffset = 0;
+            let yOffset = 0;
+
+            // Load saved position
+            const savedX = localStorage.getItem('communityBtnX');
+            const savedY = localStorage.getItem('communityBtnY');
+            if (savedX && savedY) {
+                button.style.right = 'auto';
+                button.style.bottom = 'auto';
+                button.style.left = savedX;
+                button.style.top = savedY;
+                xOffset = parseInt(savedX);
+                yOffset = parseInt(savedY);
+            }
+
+            function dragStart(e) {
+                if (e.type === "touchstart") {
+                    initialX = e.touches[0].clientX - xOffset;
+                    initialY = e.touches[0].clientY - yOffset;
+                } else {
+                    initialX = e.clientX - xOffset;
+                    initialY = e.clientY - yOffset;
+                }
+                
+                if (e.target === button) {
+                    isDragging = true;
+                }
+            }
+
+            function dragEnd(e) {
+                if (!isDragging) return;
+                
+                initialX = currentX;
+                initialY = currentY;
+                isDragging = false;
+
+                // Save position
+                localStorage.setItem('communityBtnX', button.style.left);
+                localStorage.setItem('communityBtnY', button.style.top);
+            }
+
+            function drag(e) {
+                if (!isDragging) return;
+                
+                e.preventDefault();
+
+                if (e.type === "touchmove") {
+                    currentX = e.touches[0].clientX - initialX;
+                    currentY = e.touches[0].clientY - initialY;
+                } else {
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+                }
+
+                xOffset = currentX;
+                yOffset = currentY;
+
+                // Keep button within viewport
+                const buttonRect = button.getBoundingClientRect();
+                const maxX = window.innerWidth - buttonRect.width;
+                const maxY = window.innerHeight - buttonRect.height;
+                
+                currentX = Math.min(Math.max(0, currentX), maxX);
+                currentY = Math.min(Math.max(0, currentY), maxY);
+
+                button.style.right = 'auto';
+                button.style.bottom = 'auto';
+                button.style.left = currentX + 'px';
+                button.style.top = currentY + 'px';
+            }
+
+            // Mouse events
+            button.addEventListener('mousedown', dragStart);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', dragEnd);
+
+            // Touch events
+            button.addEventListener('touchstart', dragStart);
+            document.addEventListener('touchmove', drag);
+            document.addEventListener('touchend', dragEnd);
+        });
+    </script>
+
+</body>
+</html>

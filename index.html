@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Verification</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .verification-container {
+            max-width: 400px;
+            width: 90%;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 30px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .verification-item {
+            background: linear-gradient(45deg, hwb(172 3% 0%), #ff9800);
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 12px;
+            opacity: 0;
+            transform: translateY(20px);
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            text-align: left;
+        }
+
+        .verification-item i {
+            margin-right: 15px;
+            font-size: 24px;
+            width: 30px;
+            text-align: center;
+        }
+
+        .verification-item.checked {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+        }
+
+        .verification-item.checked i {
+            animation: checkmark 0.5s ease-in-out forwards;
+        }
+
+        @keyframes checkmark {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(1); }
+        }
+
+        .continue-btn {
+            background: linear-gradient(45deg, hwb(172 3% 0%), #ff9800);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            display: none;
+        }
+
+        .continue-btn:hover {
+            transform: translateY(-5px);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="verification-container">
+        <img src="material/images/logo.png" alt="Logo" class="logo">
+        
+        <div class="verification-item" id="account-age">
+            <i class="fas fa-user-clock"></i>
+            <span>Checking Account Age...</span>
+            <div class="loading"></div>
+        </div>
+
+        <div class="verification-item" id="activity">
+            <i class="fas fa-chart-line"></i>
+            <span>Analyzing Activity Level...</span>
+            <div class="loading"></div>
+        </div>
+
+        <div class="verification-item" id="premium">
+            <i class="fas fa-gem"></i>
+            <span>Checking Telegram Premium...</span>
+            <div class="loading"></div>
+        </div>
+
+        <div class="verification-item" id="og-status">
+            <i class="fas fa-crown"></i>
+            <span>Confirming OG Status...</span>
+            <div class="loading"></div>
+        </div>
+
+        <button class="continue-btn" id="continue-btn">Continue to App</button>
+    </div>
+
+    <script>
+        // Check if user is first time visitor
+        const isFirstTime = !localStorage.getItem('hasVisited');
+
+        if (!isFirstTime) {
+            // If not first time, redirect to home
+            window.location.href = 'home.html';
+        } else {
+            // Mark as visited
+            localStorage.setItem('hasVisited', 'true');
+
+            const items = [
+                { id: 'account-age', delay: 1000, text: 'Account Age Verified' },
+                { id: 'activity', delay: 2000, text: 'Activity Level Analyzed' },
+                { id: 'premium', delay: 3000, text: 'Telegram Premium Checked' },
+                { id: 'og-status', delay: 4000, text: 'OG Status Confirmed' }
+            ];
+
+            // Animate items sequentially
+            items.forEach((item, index) => {
+                // Add initial fade in
+                setTimeout(() => {
+                    document.getElementById(item.id).classList.add('fade-in');
+                }, index * 300);
+
+                // Complete verification after delay
+                setTimeout(() => {
+                    const element = document.getElementById(item.id);
+                    element.classList.add('checked');
+                    element.querySelector('i').className = 'fas fa-check';
+                    element.querySelector('span').textContent = item.text;
+                    element.querySelector('.loading').style.display = 'none';
+
+                    // Show continue button after all verifications
+                    if (index === items.length - 1) {
+                        setTimeout(() => {
+                            const continueBtn = document.getElementById('continue-btn');
+                            continueBtn.style.display = 'block';
+                            continueBtn.classList.add('fade-in');
+                        }, 1000);
+                    }
+                }, item.delay);
+            });
+
+            // Continue button click handler
+            document.getElementById('continue-btn').addEventListener('click', () => {
+                window.location.href = 'home.html';
+            });
+        }
+    </script>
+</body>
+</html>

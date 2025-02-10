@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=430, height=932, initial-scale=1.0">
+    <title>Complete Tasks</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="material/css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #000; 
+            color: #fff; 
+            margin: 0;
+            padding: 0;
+            width: 430px;
+            height: 932px;
+            overflow-x: hidden;
+        }
+
+        #balance-container {
+            margin: 10px;
+            font-size: 16px;
+            background: linear-gradient(45deg, #1a1a1a, #2d2d2d);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #balance-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 193, 7, 0.2), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        #balance {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffc107;
+            text-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+            display: inline-block;
+            animation: balancePulse 2s infinite;
+        }
+
+        @keyframes balancePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .lion-icon {
+            font-size: 24px;
+            margin-left: 5px;
+            display: inline-block;
+            animation: lionBounce 2s infinite;
+        }
+
+        @keyframes lionBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .total-lion-text {
+            background: linear-gradient(45deg, #ffc107, #ff9800);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .task-container {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 20px auto;
+            max-width: 90%;
+        }
+
+        .task {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .task:hover::before {
+            left: 100%;
+        }
+
+        .task.quiz-task {
+            border-left: 4px solid #4CAF50;
+        }
+
+        .task.social-task {
+            border-left: 4px solid #2196F3;
+        }
+
+        .answer-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 15px;
+            color: #fff;
+            width: 100%;
+            max-width: 300px;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .answer-input:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            outline: none;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .claim-button {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .claim-button:disabled {
+            background: linear-gradient(45deg, #666, #555);
+            cursor: not-allowed;
+        }
+
+        .claim-button.claimed {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+            cursor: default;
+        }
+
+        .verify-button {
+            background: linear-gradient(45deg, #FF9800, #F57C00);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .task-reward {
+            font-size: 18px;
+            font-weight: bold;
+            color: #4CAF50;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .processing-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .processing-animation.active {
+            opacity: 1;
+        }
+
+        .processing-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Task Management Panel */
+        .task-management {
+            display: none;
+        }
+
+        .task-stats {
+            display: none;
+        }
+
+        .next-update {
+            display: none;
+        }
+
+        .success-animation {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(46, 204, 113, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            animation: fadeInOut 2s ease-in-out;
+            z-index: 100;
+        }
+
+        .success-icon {
+            font-size: 40px;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .success-text {
+            color: white;
+            font-weight: bold;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            20% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+            80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        }
+    </style>
+</head>
+<body>
+    <div id="balance-container">
+        <h2><b>TASKS & REWARDS</b></h2>
+        <div class="balance-wrapper">
+            <div class="balance-display">
+                <div class="current-balance">
+                    <span id="balance" class="animate-balance">0</span>
+                    <span class="lion-icon">🦁</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="tasks scrollable">
+        <div class="task-container">
+            <!-- Quiz Tasks -->
+            <div class="task quiz-task" id="quiz1">
+                <div class="task-detail">
+                    <div class="task-image">
+                        <img src="material/images/quiz-icon.png" alt="Quiz" width="50">
+                    </div>
+                    <div>
+                        <h4>What is the maximum supply of Loincoin? <i class="fas fa-lightbulb hint-icon"></i></h4>
+                        <input type="text" class="answer-input" placeholder="Enter answer">
+                    </div>
+                </div>
+                <div class="task-data">
+                    <span class="task-reward">200 🦁</span>
+                    <button class="claim-button" onclick="verifyQuizAnswer(1, '1000000000')">Submit</button>
+                </div>
+                <div class="processing-animation">
+                    <div class="processing-spinner"></div>
+                </div>
+            </div>
+
+            <div class="task quiz-task" id="quiz2">
+                <div class="task-detail">
+                    <div class="task-image">
+                        <img src="material/images/quiz-icon.png" alt="Quiz" width="50">
+                    </div>
+                    <div>
+                        <h4>What is the name of Loincoin's DEX? <i class="fas fa-lightbulb hint-icon"></i></h4>
+                        <input type="text" class="answer-input" placeholder="Enter answer">
+                    </div>
+                </div>
+                <div class="task-data">
+                    <span class="task-reward">300 🦁</span>
+                    <button class="claim-button" onclick="verifyQuizAnswer(2, 'LoinSwap')">Submit</button>
+                </div>
+                <div class="processing-animation">
+                    <div class="processing-spinner"></div>
+                </div>
+            </div>
+
+            <div class="task quiz-task" id="quiz3">
+                <div class="task-detail">
+                    <div class="task-image">
+                        <img src="material/images/quiz-icon.png" alt="Quiz" width="50">
+                    </div>
+                    <div>
+                        <h4>What is Loincoin's governance token symbol? <i class="fas fa-lightbulb hint-icon"></i></h4>
+                        <input type="text" class="answer-input" placeholder="Enter answer">
+                    </div>
+                </div>
+                <div class="task-data">
+                    <span class="task-reward">400 🦁</span>
+                    <button class="claim-button" onclick="verifyQuizAnswer(3, 'LOIN')">Submit</button>
+                </div>
+                <div class="processing-animation">
+                    <div class="processing-spinner"></div>
+                </div>
+            </div>
+
+            <!-- Social Tasks -->
+            <div class="task social-task" id="social1">
+                <div class="task-detail">
+                    <div class="task-image">
+                        <img src="material/images/twitter-icon.png" alt="Twitter" width="50">
+                    </div>
+                    <div>
+                        <h4>Follow & Retweet our Latest Post</h4>
+                        <a href="https://twitter.com/loincoin" target="_blank" class="social-link">@loincoin</a>
+                        <button class="verify-button" onclick="verifySocialTask(1)">Verify Action</button>
+                    </div>
+                </div>
+                <div class="task-data">
+                    <span class="task-reward">250 🦁</span>
+                    <button class="claim-button" disabled>Verify First</button>
+                </div>
+                <div class="processing-animation">
+                    <div class="processing-spinner"></div>
+                </div>
+            </div>
+
+            <div class="task social-task" id="social2">
+                <div class="task-detail">
+                    <div class="task-image">
+                        <img src="material/images/telegram-icon.png" alt="Telegram" width="50">
+                    </div>
+                    <div>
+                        <h4>Join Telegram & Share Invite Link</h4>
+                        <a href="https://t.me/loincoin" target="_blank" class="social-link">Loincoin Community</a>
+                        <button class="verify-button" onclick="verifySocialTask(2)">Verify Action</button>
+                    </div>
+                </div>
+                <div class="task-data">
+                    <span class="task-reward">350 🦁</span>
+                    <button class="claim-button" disabled>Verify First</button>
+                </div>
+                <div class="processing-animation">
+                    <div class="processing-spinner"></div>
+                </div>
+            </div>
+
+            <div class="task social-task" id="social3">
+                <div class="task-detail">
+                    <div class="task-image">
+                        <img src="material/images/discord-icon.png" alt="Discord" width="50">
+                    </div>
+                    <div>
+                        <h4>Join Discord & Invite 3 Friends</h4>
+                        <a href="https://discord.gg/loincoin" target="_blank" class="social-link">Loincoin Discord</a>
+                        <button class="verify-button" onclick="verifySocialTask(3)">Verify Action</button>
+                    </div>
+                </div>
+                <div class="task-data">
+                    <span class="task-reward">450 🦁</span>
+                    <button class="claim-button" disabled>Verify First</button>
+                </div>
+                <div class="processing-animation">
+                    <div class="processing-spinner"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <nav class="bottom-nav">
+        <a href="home.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>HOME</span>
+        </a>
+        <a href="invite-friends.html" class="nav-item">
+            <i class="fas fa-user-friends"></i>
+            <span>FRIENDS</span>
+        </a>
+        <a href="task.html" class="nav-item">
+            <i class="fas fa-tasks"></i>
+            <span>TASKS</span>
+        </a>
+        <a href="balance.html" class="nav-item">
+            <i class="fas fa-wallet"></i>
+            <span>BALANCE</span>
+        </a>
+    </nav>
+
+    <script>
+        // User and Task Management
+        let taskState = JSON.parse(localStorage.getItem('taskState') || '{}');
+        let users = JSON.parse(localStorage.getItem('users') || '{}');
+        let currentUser = localStorage.getItem('currentUserId');
+
+        // Initialize user if not exists
+        if (!currentUser) {
+            currentUser = 'user_' + Date.now();
+            localStorage.setItem('currentUserId', currentUser);
+        }
+
+        if (!users[currentUser]) {
+            users[currentUser] = {
+                username: 'User_' + currentUser.split('_')[1],
+                balance: 0,
+                completedTasks: 0,
+                lastActive: Date.now()
+            };
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        function verifyQuizAnswer(quizId, correctAnswer) {
+            const taskElement = document.getElementById(`quiz${quizId}`);
+            const input = taskElement.querySelector('.answer-input');
+            const button = taskElement.querySelector('.claim-button');
+            const processing = taskElement.querySelector('.processing-animation');
+
+            // Check if task already claimed by current user
+            if (isTaskClaimed(currentUser, `quiz_${quizId}`)) {
+                alert('You have already claimed this reward!');
+                return;
+            }
+
+            if (input.value.trim().toLowerCase() === correctAnswer.toLowerCase()) {
+                processing.classList.add('active');
+                button.disabled = true;
+
+                const rewardAmount = parseInt(taskElement.querySelector('.task-reward').textContent);
+                setTimeout(() => {
+                    processing.classList.remove('active');
+                    input.disabled = true;
+                    button.textContent = 'Claimed';
+                    button.classList.add('claimed');
+                    
+                    // Update user balance and stats
+                    updateUserBalance(currentUser, rewardAmount);
+                    
+                    // Save claim state
+                    saveClaimState(currentUser, `quiz_${quizId}`, rewardAmount);
+                    
+                    // Show success animation
+                    showSuccessAnimation(taskElement);
+                }, 1000);
+            } else {
+                input.style.borderColor = '#ff4444';
+                setTimeout(() => {
+                    input.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                }, 1000);
+            }
+        }
+
+        function verifySocialTask(taskId) {
+            const taskElement = document.getElementById(`social${taskId}`);
+            const verifyButton = taskElement.querySelector('.verify-button');
+            const claimButton = taskElement.querySelector('.claim-button');
+            const processing = taskElement.querySelector('.processing-animation');
+
+            // Check if task already claimed by current user
+            if (isTaskClaimed(currentUser, `social_${taskId}`)) {
+                alert('You have already claimed this reward!');
+                return;
+            }
+
+            processing.classList.add('active');
+            verifyButton.disabled = true;
+
+            setTimeout(() => {
+                processing.classList.remove('active');
+                verifyButton.textContent = 'Verified';
+                verifyButton.style.background = 'linear-gradient(45deg, #4CAF50, #45a049)';
+                
+                claimButton.disabled = false;
+                claimButton.textContent = 'Claim';
+                const rewardAmount = parseInt(taskElement.querySelector('.task-reward').textContent);
+                
+                claimButton.onclick = () => {
+                    if (isTaskClaimed(currentUser, `social_${taskId}`)) {
+                        alert('You have already claimed this reward!');
+                        return;
+                    }
+
+                    processing.classList.add('active');
+                    claimButton.disabled = true;
+                    
+                    setTimeout(() => {
+                        processing.classList.remove('active');
+                        claimButton.textContent = 'Claimed';
+                        claimButton.classList.add('claimed');
+                        
+                        // Update user balance and stats
+                        updateUserBalance(currentUser, rewardAmount);
+                        
+                        // Save claim state
+                        saveClaimState(currentUser, `social_${taskId}`, rewardAmount);
+                        
+                        // Show success animation
+                        showSuccessAnimation(taskElement);
+                    }, 1000);
+                };
+            }, 1000);
+        }
+
+        function isTaskClaimed(userId, taskKey) {
+            return taskState[`${userId}_${taskKey}`]?.claimed || false;
+        }
+
+        function updateUserBalance(userId, amount) {
+            users[userId].balance = (users[userId].balance || 0) + amount;
+            users[userId].completedTasks = (users[userId].completedTasks || 0) + 1;
+            users[userId].lastActive = Date.now();
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        function saveClaimState(userId, taskKey, amount) {
+            const key = `${userId}_${taskKey}`;
+            taskState[key] = {
+                claimed: true,
+                timestamp: Date.now(),
+                reward: amount,
+                userId: userId
+            };
+            localStorage.setItem('taskState', JSON.stringify(taskState));
+        }
+
+        function showSuccessAnimation(element) {
+            const success = document.createElement('div');
+            success.className = 'success-animation';
+            success.innerHTML = `
+                <div class="success-icon">✓</div>
+                <div class="success-text">Reward Credited!</div>
+            `;
+            element.appendChild(success);
+            
+            setTimeout(() => {
+                success.remove();
+            }, 2000);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check for previously claimed tasks
+            Object.entries(taskState).forEach(([key, value]) => {
+                if (value.claimed && key.startsWith(currentUser)) {
+                    const [_, type, id] = key.split('_');
+                    const taskElement = document.getElementById(`${type}${id}`);
+                    if (taskElement) {
+                        const button = taskElement.querySelector('.claim-button');
+                        const input = taskElement.querySelector('.answer-input');
+                        if (input) input.disabled = true;
+                        button.textContent = 'Claimed';
+                        button.classList.add('claimed');
+                        button.disabled = true;
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

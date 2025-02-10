@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Loincoin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .admin-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-right: 1px solid #333;
+        }
+
+        .main-content {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .admin-header {
+            background: linear-gradient(45deg, #2c3e50, #3498db);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .data-table th, .data-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-table th {
+            background: rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item {
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+            background: #3498db;
+        }
+
+        .search-bar {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            color: white;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn {
+            background: #3498db;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .task-management {
+            margin-top: 30px;
+        }
+
+        .task-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        #taskUpdateForm {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="sidebar">
+            <h2>Admin Panel</h2>
+            <div class="nav-item active">
+                <i class="fas fa-chart-line"></i>
+                Dashboard
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-users"></i>
+                Users
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-tasks"></i>
+                Tasks
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-coins"></i>
+                Rewards
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-cog"></i>
+                Settings
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="admin-header">
+                <h1>Dashboard Overview</h1>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Users</h3>
+                    <p class="stat-value" id="totalUsers">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Rewards Claimed</h3>
+                    <p class="stat-value" id="totalRewards">0 🦁</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Tasks</h3>
+                    <p class="stat-value" id="activeTasks">6</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Completion Rate</h3>
+                    <p class="stat-value" id="completionRate">0%</p>
+                </div>
+            </div>
+
+            <div class="recent-activity">
+                <h2>Recent Activity</h2>
+                <div id="activityLog"></div>
+            </div>
+
+            <input type="text" class="search-bar" placeholder="Search users..." onkeyup="filterUsers(this.value)">
+
+            <h2>User Management</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Username</th>
+                        <th>Balance</th>
+                        <th>Tasks Completed</th>
+                        <th>Last Active</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody"></tbody>
+            </table>
+
+            <div id="userEditForm" style="display: none;">
+                <h3>Edit User</h3>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="editUsername">
+                </div>
+                <div class="form-group">
+                    <label>Balance</label>
+                    <input type="number" id="editBalance">
+                </div>
+                <button onclick="saveUserEdit()" class="action-btn edit-btn">Save Changes</button>
+                <button onclick="cancelUserEdit()" class="action-btn delete-btn">Cancel</button>
+            </div>
+
+            <div class="task-management">
+                <div id="tasksList"></div>
+                <div id="taskStats"></div>
+            </div>
+
+            <div class="rewards-summary">
+                <div id="rewardStats"></div>
+                <div id="rewardHistory"></div>
+            </div>
+
+            <div class="settings-form">
+                <div class="form-group">
+                    <label>Reset All Data</label>
+                    <button onclick="confirmResetData()" class="action-btn delete-btn">Reset Data</button>
+                </div>
+                <div class="form-group">
+                    <label>Export Data</label>
+                    <button onclick="exportData()" class="action-btn edit-btn">Export</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Admin Panel functionality
+        let users = JSON.parse(localStorage.getItem('users') || '{}');
+        let taskState = JSON.parse(localStorage.getItem('taskState') || '{}');
+        let currentView = 'dashboard';
+
+        const taskConfigs = {
+            quiz_1: { title: "Quiz: Maximum Supply", reward: 200, type: "quiz" },
+            quiz_2: { title: "Quiz: Blockchain Technology", reward: 300, type: "quiz" },
+            quiz_3: { title: "Quiz: Cryptocurrency", reward: 400, type: "quiz" },
+            social_1: { title: "Social: Follow Twitter", reward: 250, type: "social" },
+            social_2: { title: "Social: Join Telegram", reward: 350, type: "social" },
+            social_3: { title: "Social: Share Post", reward: 450, type: "social" }
+        };
+
+        // Navigation handling
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const view = item.textContent.trim().toLowerCase();
+                switchView(view);
+            });
+        });
+
+        function switchView(view) {
+            currentView = view;
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.textContent.trim().toLowerCase() === view) {
+                    item.classList.add('active');
+                }
+            });
+
+            // Update content based on view
+            const mainContent = document.querySelector('.main-content');
+            switch (view) {
+                case 'dashboard':
+                    mainContent.innerHTML = generateDashboardHTML();
+                    updateDashboardStats();
+                    break;
+                case 'users':
+                    mainContent.innerHTML = generateUsersHTML();
+                    updateUserTable();
+                    break;
+                case 'tasks':
+                    mainContent.innerHTML = generateTasksHTML();
+                    updateTasksList();
+                    break;
+                case 'rewards':
+                    mainContent.innerHTML = generateRewardsHTML();
+                    updateRewardsData();
+                    break;
+                case 'settings':
+                    mainContent.innerHTML = generateSettingsHTML();
+                    break;
+            }
+        }
+
+        function generateDashboardHTML() {
+            return `
+                <div class="admin-header">
+                    <h1>Dashboard Overview</h1>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Users</h3>
+                        <p class="stat-value" id="totalUsers">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Rewards Claimed</h3>
+                        <p class="stat-value" id="totalRewards">0 🦁</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Active Tasks</h3>
+                        <p class="stat-value" id="activeTasks">6</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Completion Rate</h3>
+                        <p class="stat-value" id="completionRate">0%</p>
+                    </div>
+                </div>
+                <div class="recent-activity">
+                    <h2>Recent Activity</h2>
+                    <div id="activityLog"></div>
+                </div>
+            `;
+        }
+
+        function generateUsersHTML() {
+            return `
+                <div class="admin-header">
+                    <h1>User Management</h1>
+                </div>
+                <input type="text" class="search-bar" placeholder="Search users..." onkeyup="filterUsers(this.value)">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Username</th>
+                            <th>Balance</th>
+                            <th>Tasks Completed</th>
+                            <th>Last Active</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody"></tbody>
+                </table>
+                <div id="userEditForm" style="display: none;">
+                    <h3>Edit User</h3>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="editUsername">
+                    </div>
+                    <div class="form-group">
+                        <label>Balance</label>
+                        <input type="number" id="editBalance">
+                    </div>
+                    <button onclick="saveUserEdit()" class="action-btn edit-btn">Save Changes</button>
+                    <button onclick="cancelUserEdit()" class="action-btn delete-btn">Cancel</button>
+                </div>
+            `;
+        }
+
+        function generateTasksHTML() {
+            return `
+                <div class="admin-header">
+                    <h1>Task Management</h1>
+                </div>
+                <div class="task-management">
+                    <div id="tasksList"></div>
+                    <div id="taskStats"></div>
+                </div>
+            `;
+        }
+
+        function generateRewardsHTML() {
+            return `
+                <div class="admin-header">
+                    <h1>Rewards Overview</h1>
+                </div>
+                <div class="rewards-summary">
+                    <div id="rewardStats"></div>
+                    <div id="rewardHistory"></div>
+                </div>
+            `;
+        }
+
+        function generateSettingsHTML() {
+            return `
+                <div class="admin-header">
+                    <h1>Admin Settings</h1>
+                </div>
+                <div class="settings-form">
+                    <div class="form-group">
+                        <label>Reset All Data</label>
+                        <button onclick="confirmResetData()" class="action-btn delete-btn">Reset Data</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Export Data</label>
+                        <button onclick="exportData()" class="action-btn edit-btn">Export</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateDashboardStats() {
+            const totalUsers = Object.keys(users).length;
+            const totalRewards = Object.values(users).reduce((sum, user) => sum + (user.balance || 0), 0);
+            const completedTasks = Object.values(taskState).filter(t => t.claimed).length;
+            const completionRate = totalUsers > 0 ? (completedTasks / (totalUsers * 6) * 100).toFixed(1) : 0;
+
+            document.getElementById('totalUsers').textContent = totalUsers;
+            document.getElementById('totalRewards').textContent = `${totalRewards} 🦁`;
+            document.getElementById('activeTasks').textContent = '6';
+            document.getElementById('completionRate').textContent = `${completionRate}%`;
+
+            // Update activity log
+            updateActivityLog();
+        }
+
+        function updateActivityLog() {
+            const activityLog = document.getElementById('activityLog');
+            if (!activityLog) return;
+
+            const recentClaims = Object.entries(taskState)
+                .filter(([_, value]) => value.claimed)
+                .sort((a, b) => b[1].timestamp - a[1].timestamp)
+                .slice(0, 5);
+
+            activityLog.innerHTML = recentClaims.map(([key, value]) => {
+                const user = users[value.userId] || { username: 'Unknown User' };
+                const task = taskConfigs[key.split('_').slice(1).join('_')];
+                return `
+                    <div class="activity-item">
+                        <span class="activity-user">${user.username}</span>
+                        claimed ${task.reward} 🦁 from ${task.title}
+                        <span class="activity-time">${new Date(value.timestamp).toLocaleString()}</span>
+                    </div>
+                `;
+            }).join('') || '<p>No recent activity</p>';
+        }
+
+        function updateUserTable() {
+            const tableBody = document.getElementById('userTableBody');
+            if (!tableBody) return;
+
+            tableBody.innerHTML = '';
+            Object.entries(users).forEach(([userId, userData]) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${userId}</td>
+                    <td>${userData.username || 'Anonymous'}</td>
+                    <td>${userData.balance || 0} 🦁</td>
+                    <td>${userData.completedTasks || 0}/6</td>
+                    <td>${new Date(userData.lastActive || Date.now()).toLocaleString()}</td>
+                    <td>
+                        <button class="action-btn edit-btn" onclick="editUser('${userId}')">Edit</button>
+                        <button class="action-btn delete-btn" onclick="deleteUser('${userId}')">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function updateTasksList() {
+            const tasksList = document.getElementById('tasksList');
+            if (!tasksList) return;
+
+            tasksList.innerHTML = Object.entries(taskConfigs).map(([taskId, config]) => {
+                const completions = Object.values(taskState).filter(t => 
+                    t.claimed && taskId === t.taskId
+                ).length;
+
+                return `
+                    <div class="task-card">
+                        <h3>${config.title}</h3>
+                        <p>Reward: ${config.reward} 🦁</p>
+                        <p>Type: ${config.type}</p>
+                        <p>Completions: ${completions}</p>
+                        <div class="task-actions">
+                            <button class="action-btn edit-btn" onclick="editTask('${taskId}')">Edit</button>
+                            <button class="action-btn delete-btn" onclick="resetTaskClaims('${taskId}')">Reset Claims</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateRewardsData() {
+            const rewardStats = document.getElementById('rewardStats');
+            if (!rewardStats) return;
+
+            const totalRewards = Object.values(users).reduce((sum, user) => sum + (user.balance || 0), 0);
+            const rewardsByTask = Object.entries(taskState).reduce((acc, [key, value]) => {
+                if (value.claimed) {
+                    const taskType = key.split('_')[1];
+                    acc[taskType] = (acc[taskType] || 0) + value.reward;
+                }
+                return acc;
+            }, {});
+
+            rewardStats.innerHTML = `
+                <div class="stat-card">
+                    <h3>Total Rewards Distributed</h3>
+                    <p>${totalRewards} 🦁</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Rewards by Task Type</h3>
+                    <p>Quiz Tasks: ${rewardsByTask.quiz || 0} 🦁</p>
+                    <p>Social Tasks: ${rewardsByTask.social || 0} 🦁</p>
+                </div>
+            `;
+        }
+
+        let currentEditingUser = null;
+
+        function editUser(userId) {
+            currentEditingUser = userId;
+            const user = users[userId];
+            const form = document.getElementById('userEditForm');
+            form.style.display = 'block';
+            document.getElementById('editUsername').value = user.username || '';
+            document.getElementById('editBalance').value = user.balance || 0;
+        }
+
+        function saveUserEdit() {
+            if (!currentEditingUser) return;
+
+            const username = document.getElementById('editUsername').value;
+            const balance = parseInt(document.getElementById('editBalance').value) || 0;
+
+            users[currentEditingUser] = {
+                ...users[currentEditingUser],
+                username,
+                balance
+            };
+
+            localStorage.setItem('users', JSON.stringify(users));
+            cancelUserEdit();
+            updateUserTable();
+        }
+
+        function cancelUserEdit() {
+            currentEditingUser = null;
+            document.getElementById('userEditForm').style.display = 'none';
+        }
+
+        function deleteUser(userId) {
+            if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+                delete users[userId];
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                // Remove user's task claims
+                Object.keys(taskState).forEach(key => {
+                    if (key.startsWith(userId)) {
+                        delete taskState[key];
+                    }
+                });
+                localStorage.setItem('taskState', JSON.stringify(taskState));
+
+                updateUserTable();
+                updateDashboardStats();
+            }
+        }
+
+        function filterUsers(searchTerm) {
+            const rows = document.querySelectorAll('#userTableBody tr');
+            searchTerm = searchTerm.toLowerCase();
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        }
+
+        function resetTaskClaims(taskId) {
+            if (confirm('Are you sure you want to reset all claims for this task?')) {
+                Object.keys(taskState).forEach(key => {
+                    if (key.includes(taskId)) {
+                        delete taskState[key];
+                    }
+                });
+                localStorage.setItem('taskState', JSON.stringify(taskState));
+                updateTasksList();
+                updateDashboardStats();
+            }
+        }
+
+        function confirmResetData() {
+            if (confirm('Are you sure you want to reset all data? This action cannot be undone.')) {
+                localStorage.removeItem('users');
+                localStorage.removeItem('taskState');
+                users = {};
+                taskState = {};
+                switchView('dashboard');
+            }
+        }
+
+        function exportData() {
+            const data = {
+                users,
+                taskState,
+                taskConfigs,
+                exportDate: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `loincoin_admin_data_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize admin panel
+        document.addEventListener('DOMContentLoaded', () => {
+            switchView('dashboard');
+        });
+    </script>
+</body>
+</html>
