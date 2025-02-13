@@ -3,92 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lion Coin Pre-Sale</title>
+    <title>Coming Soon with Swipe</title>
     <style>
-        @keyframes glow {
-            0% { box-shadow: 0 0 10px #00ccff; }
-            50% { box-shadow: 0 0 30px #0099ff, 0 0 40px #0033cc; }
-            100% { box-shadow: 0 0 10px #00ccff; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            background: #000;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            height: 100vh;
             color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
         }
 
-        .container {
-            padding: 20px;
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: 2rem;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .coming-soon {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .second-page {
+            transform: translateX(100%);
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .active .coming-soon {
+            transform: translateX(-100%);
+        }
+
+        .active .second-page {
+            transform: translateX(0);
         }
 
         h1 {
-            background: linear-gradient(90deg, #00ccff, #0033cc);
-            -webkit-background-clip: text;
-            color: transparent;
-            font-size: 2.5em;
-            animation: glow 1.5s infinite alternate;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        .box {
-            border: 2px solid #00ccff;
-            padding: 20px;
-            margin: 20px auto;
+        .countdown {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1.5rem;
             border-radius: 15px;
+            min-width: 120px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .countdown-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .countdown-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .swipe-container {
+            position: relative;
             width: 80%;
             max-width: 400px;
-            background: linear-gradient(45deg, #001a33, #00264d);
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+            height: 60px;
+            margin: 2rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            overflow: hidden;
+            cursor: pointer;
         }
 
-        .box:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px #00ccff;
-        }
-
-        .buy-button {
-            display: inline-block;
-            padding: 15px 25px;
-            margin-top: 10px;
-            background: linear-gradient(45deg, #00ccff, #0033cc);
-            color: black;
+        .swipe-button {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 60px;
+            background: linear-gradient(45deg, #ff6b6b, #ff9f43);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-weight: bold;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 1.2em;
-            animation: glow 1.5s infinite alternate;
+            color: white;
             transition: transform 0.3s;
         }
 
-        .buy-button:hover {
-            transform: scale(1.1);
+        .details {
+            padding: 2rem;
+            text-align: center;
         }
 
+        .details-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            margin: 1rem;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <h1>🚀 Lion Coin Pre-Sale 🚀</h1>
-        <p>Send payment to: <b>UQASqD_AMYomxXvmrrxnMKEtCHlLnVu9shye0KC6_Gk-kaAo</b></p>
-
-        <div class="box">
-            <h2>1 TON = 500 Lion Coins</h2>
-            <a href="ton://transfer/UQASqD_AMYomxXvmrrxnMKEtCHlLnVu9shye0KC6_Gk-kaAo?amount=1000000000&text=LionCoin_1TON" class="buy-button">💎 Buy Now</a>
+    <div class="page coming-soon">
+        <h1>Coming Soon!</h1>
+        <div class="countdown">
+            <div class="countdown-item">
+                <span class="countdown-number" id="days">00</span>
+                DAYS
+            </div>
+            <div class="countdown-item">
+                <span class="countdown-number" id="hours">00</span>
+                HOURS
+            </div>
+            <div class="countdown-item">
+                <span class="countdown-number" id="minutes">00</span>
+                MINUTES
+            </div>
+            <div class="countdown-item">
+                <span class="countdown-number" id="seconds">00</span>
+                SECONDS
+            </div>
         </div>
-
-        <div class="box">
-            <h2>2 TON = 1,000 Lion Coins</h2>
-            <a href="ton://transfer/UQASqD_AMYomxXvmrrxnMKEtCHlLnVu9shye0KC6_Gk-kaAo?amount=2000000000&text=LionCoin_2TON" class="buy-button">🔥 Buy Now</a>
-        </div>
-
-        <div class="box">
-            <h2>5 TON = 4,000 Lion Coins</h2>
-            <a href="ton://transfer/UQASqD_AMYomxXvmrrxnMKEtCHlLnVu9shye0KC6_Gk-kaAo?amount=5000000000&text=LionCoin_5TON" class="buy-button">⚡ Buy Now</a>
+        <div class="swipe-container" id="swipeContainer">
+            <div class="swipe-button" id="swipeButton">SWIPE →</div>
         </div>
     </div>
 
+    <div class="page second-page">
+        <div class="details">
+            <h2>Coin Details</h2>
+            <div class="details-item">
+                <h3>Total Supply</h3>
+                <p>1,000,000,000</p>
+            </div>
+            <div class="details-item">
+                <h3>Suplex Features</h3>
+                <p>Advanced security protocol</p>
+                <p>Instant transactions</p>
+            </div>
+            <button onclick="location.reload()" style="padding: 10px 20px; margin-top: 20px; background: #ff6b6b; border: none; border-radius: 25px; color: white; cursor: pointer;">
+                Back to Main
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Countdown Timer (1 month)
+        const countDownDate = new Date().getTime() + (30 * 24 * 60 * 60 * 1000);
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+
+            if (distance < 0) clearInterval(timer);
+        }
+        updateTimer();
+        const timer = setInterval(updateTimer, 1000);
+
+        // Swipe Logic
+        let isDragging = false;
+        let startX = 0;
+        let currentX = 0;
+        const swipeThreshold = 0.7;
+        const body = document.body;
+        const swipeButton = document.getElementById('swipeButton');
+        const containerWidth = document.getElementById('swipeContainer').offsetWidth;
+
+        swipeButton.addEventListener('mousedown', startDrag);
+        swipeButton.addEventListener('touchstart', startDrag);
+
+        function startDrag(e) {
+            isDragging = true;
+            startX = e.clientX || e.touches[0].clientX;
+            swipeButton.style.transition = 'none';
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('touchmove', drag);
+            document.addEventListener('mouseup', endDrag);
+            document.addEventListener('touchend', endDrag);
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            currentX = (e.clientX || e.touches[0].clientX) - startX;
+            if (currentX < 0) currentX = 0;
+            if (currentX > containerWidth - swipeButton.offsetWidth) {
+                currentX = containerWidth - swipeButton.offsetWidth;
+            }
+            swipeButton.style.transform = `translateX(${currentX}px)`;
+        }
+
+        function endDrag() {
+            isDragging = false;
+            swipeButton.style.transition = 'transform 0.3s ease';
+
+            if (currentX >= (containerWidth - swipeButton.offsetWidth) * swipeThreshold) {
+                body.classList.add('active');
+                swipeButton.style.transform = `translateX(${containerWidth - swipeButton.offsetWidth}px)`;
+            } else {
+                swipeButton.style.transform = 'translateX(0)';
+            }
+
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('touchmove', drag);
+        }
+    </script>
 </body>
 </html>
