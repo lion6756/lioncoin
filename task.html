@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=430, height=932, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Complete Tasks</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="material/css/styles.css">
@@ -14,20 +14,17 @@
             color: #fff; 
             margin: 0;
             padding: 0;
-            width: 430px;
-            height: 932px;
+            min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
+            padding-bottom: 70px; /* Space for bottom nav */
         }
 
         #balance-container {
             margin: 10px;
-            font-size: 16px;
-            background: linear-gradient(45deg, #1a1a1a, #2d2d2d);
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.2);
-            position: relative;
-            overflow: hidden;
+            font-size: 14px; /* Reduced font size */
+            padding: 12px; /* Reduced padding */
+            border-radius: 12px;
         }
 
         #balance-container::before {
@@ -47,7 +44,7 @@
         }
 
         #balance {
-            font-size: 32px;
+            font-size: 24px;
             font-weight: bold;
             color: #ffc107;
             text-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
@@ -62,7 +59,7 @@
         }
 
         .lion-icon {
-            font-size: 24px;
+            font-size: 20px;
             margin-left: 5px;
             display: inline-block;
             animation: lionBounce 2s infinite;
@@ -79,31 +76,31 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: bold;
-            font-size: 20px;
+            font-size: 16px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         .task-container {
-            padding: 20px;
+            padding: 15px; /* Reduced padding */
             background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            margin: 20px auto;
-            max-width: 90%;
+            margin: 15px auto; /* Reduced margin */
+            max-width: 95%; /* Increased width slightly */
         }
 
         .task {
             background: rgba(255, 255, 255, 0.05);
+            -webkit-backdrop-filter: blur(5px);
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 15px;
-            padding: 20px;
-            margin: 15px 0;
+            padding: 15px; /* Reduced padding */
+            margin: 10px 0; /* Reduced margin */
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
 
         .task::before {
@@ -138,11 +135,11 @@
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
-            padding: 8px 15px;
+            padding: 8px 12px;
             color: #fff;
             width: 100%;
-            max-width: 300px;
-            margin-top: 10px;
+            max-width: 90%; /* Adjusted width */
+            margin-top: 8px;
             transition: all 0.3s ease;
         }
 
@@ -156,7 +153,8 @@
         .claim-button {
             background: linear-gradient(45deg, #4CAF50, #45a049);
             border: none;
-            padding: 10px 20px;
+            padding: 8px 15px;
+            font-size: 14px; /* Reduced font size */
             border-radius: 8px;
             color: white;
             cursor: pointer;
@@ -182,7 +180,7 @@
             border-radius: 6px;
             color: white;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 8px;
             transition: all 0.3s ease;
         }
 
@@ -253,6 +251,8 @@
             text-align: center;
             animation: fadeInOut 2s ease-in-out;
             z-index: 100;
+            width: 90%;
+            max-width: 300px;
         }
 
         .success-icon {
@@ -272,148 +272,528 @@
             80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
             100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
         }
+
+        #reward-section, #social-task {
+            background-color: #f0f0f0;
+            border: 2px solid #ccc;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .verification-status {
+            height: 3px;
+            width: 0;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            margin-top: 5px;
+            border-radius: 3px;
+            transition: width 3s linear;
+            max-width: 90%;
+            margin: 5px auto;
+        }
+
+        .social-button {
+            display: inline-block;
+            padding: 8px 15px;
+            font-size: 14px;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            margin: 8px auto;
+            transition: transform 0.3s ease;
+            width: 90%; /* Make buttons full width */
+            max-width: 250px;
+            display: block;
+        }
+
+        .social-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .twitter-button {
+            background: linear-gradient(45deg, #1DA1F2, #0d8ecf);
+        }
+
+        .instagram-button {
+            background: linear-gradient(45deg, #833AB4, #FD1D1D, #F77737);
+        }
+
+        .telegram-button {
+            background: linear-gradient(45deg, #0088cc, #0072a6);
+        }
+
+        .code-task {
+            border-left: 4px solid #ffc107;
+        }
+
+        @keyframes verifying {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        .task-update-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .panel-section {
+            margin: 10px 0;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .panel-section input {
+            width: 100%;
+            padding: 6px;
+            margin: 4px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            color: #fff;
+        }
+
+        .update-button, .reset-button {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .reset-button {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+        }
+
+        .admin-toggle {
+            position: fixed;
+            bottom: 70px; /* Adjusted to not overlap with bottom nav */
+            right: 15px;
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+            border: none;
+            width: 40px; /* Smaller size */
+            height: 40px;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 999;
+            display: none; /* Hidden by default */
+        }
+
+        /* Bottom Navigation Adjustments */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            font-size: 12px; /* Reduced font size */
+        }
+
+        .nav-item i {
+            font-size: 16px; /* Reduced icon size */
+        }
+
+        /* Task Description Text */
+        .task p {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .balance-wrapper {
+            position: relative;
+            padding: 20px;
+            margin: 20px 0;
+            background: linear-gradient(45deg, hwb(172 3% 0%), #ff9800);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .balance-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shine 3s infinite;
+        }
+
+        .balance-label {
+            font-size: 20px;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .balance-amount {
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            margin: 10px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s forwards;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .coin-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            vertical-align: middle;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shine {
+            to {
+                left: 100%;
+            }
+        }
+
+        /* Admin Panel Styles */
+        .task-update-panel {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .panel-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .input-group {
+            margin: 10px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .update-button, .reset-button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .update-button {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .reset-button {
+            background: linear-gradient(45deg, #ff4444, #cc0000);
+            color: white;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .stat-item span:first-child {
+            display: block;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .stat-item span:last-child {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
     <div id="balance-container">
-        <h2><b>TASKS & REWARDS</b></h2>
         <div class="balance-wrapper">
-            <div class="balance-display">
-                <div class="current-balance">
-                    <span id="balance" class="animate-balance">0</span>
-                    <span class="lion-icon">🦁</span>
+            <div class="balance-label">Total Lion Balance</div>
+            <div class="balance-amount">
+                <img src="material/images/logo.png" class="coin-icon" alt="Coin">
+                <span id="balance" data-balance-display>0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unique Code Tasks Section -->
+    <div class="task-container">
+        <h2>🎁 Daily Code Tasks</h2>
+        
+        <!-- First Code Task -->
+        <div class="task code-task">
+            <h3>First Code (100 Lions)</h3>
+            <div class="code-input-wrapper">
+                <input type="text" class="answer-input" placeholder="Enter unique code" 
+                       data-reward="100" data-task-number="1">
+                <div class="verification-status"></div>
+            </div>
+            <button class="verify-button" onclick="verifyCode(1)">
+                <i class="fas fa-check-circle"></i> Verify
+            </button>
+            <button class="claim-button" style="display: none;" onclick="claimReward(1)">
+                Claim 100 Lions
+            </button>
+        </div>
+
+        <!-- Second Code Task -->
+        <div class="task code-task">
+            <h3>Second Code (500 Lions)</h3>
+            <div class="code-input-wrapper">
+                <input type="text" class="answer-input" placeholder="Enter unique code" 
+                       data-reward="500" data-task-number="2">
+                <div class="verification-status"></div>
+            </div>
+            <button class="verify-button" onclick="verifyCode(2)">
+                <i class="fas fa-check-circle"></i> Verify
+            </button>
+            <button class="claim-button" style="display: none;" onclick="claimReward(2)">
+                Claim 500 Lions
+            </button>
+        </div>
+
+        <!-- Third Code Task -->
+        <div class="task code-task">
+            <h3>Third Code (2000 Lions)</h3>
+            <div class="code-input-wrapper">
+                <input type="text" class="answer-input" placeholder="Enter unique code" 
+                       data-reward="2000" data-task-number="3">
+                <div class="verification-status"></div>
+            </div>
+            <button class="verify-button" onclick="verifyCode(3)">
+                <i class="fas fa-check-circle"></i> Verify
+            </button>
+            <button class="claim-button" style="display: none;" onclick="claimReward(3)">
+                Claim 2000 Lions
+            </button>
+        </div>
+    </div>
+
+    <!-- Social Tasks Section -->
+    <div class="task-container">
+        <h2>🌟 Social Tasks</h2>
+        
+        <!-- Twitter Follow Task -->
+        <div class="task social-task">
+            <h3>Follow on Twitter</h3>
+            <p>Follow us and earn 50 Lions!</p>
+            <a href="https://twitter.com/youraccount" target="_blank" class="social-button twitter-button" onclick="handleSocialClick('twitter')">
+                <i class="fab fa-twitter"></i> Follow on Twitter
+            </a>
+            <button class="claim-button social-claim" onclick="claimSocialReward('twitter')" disabled>
+                Claim 50 Lions
+            </button>
+        </div>
+
+        <!-- Instagram Follow Task -->
+        <div class="task social-task">
+            <h3>Follow on Instagram</h3>
+            <p>Follow us and earn 50 Lions!</p>
+            <a href="https://instagram.com/youraccount" target="_blank" class="social-button instagram-button" onclick="handleSocialClick('instagram')">
+                <i class="fab fa-instagram"></i> Follow on Instagram
+            </a>
+            <button class="claim-button social-claim" onclick="claimSocialReward('instagram')" disabled>
+                Claim 50 Lions
+            </button>
+        </div>
+
+        <!-- Telegram Follow Task -->
+        <div class="task social-task">
+            <h3>Join Telegram</h3>
+            <p>Join our community and earn 50 Lions!</p>
+            <a href="https://t.me/yourchannel" target="_blank" class="social-button telegram-button" onclick="handleSocialClick('telegram')">
+                <i class="fab fa-telegram"></i> Join Telegram
+            </a>
+            <button class="claim-button social-claim" onclick="claimSocialReward('telegram')" disabled>
+                Claim 50 Lions
+            </button>
+        </div>
+    </div>
+
+    <!-- Task Update Panel (Initially Hidden) -->
+    <div id="taskUpdatePanel" class="task-update-panel">
+        <div class="panel-header">
+            <h2>Admin Task Management</h2>
+            <button onclick="togglePanel()" class="close-button">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <!-- Daily Code Management -->
+        <div class="panel-section">
+            <h3>Daily Code Management</h3>
+            <div class="code-update">
+                <div class="input-group">
+                    <label>First Code (100 Lions)</label>
+                    <input type="text" id="code1" placeholder="Enter code for 100 Lions">
+                </div>
+                <div class="input-group">
+                    <label>Second Code (500 Lions)</label>
+                    <input type="text" id="code2" placeholder="Enter code for 500 Lions">
+                </div>
+                <div class="input-group">
+                    <label>Third Code (2000 Lions)</label>
+                    <input type="text" id="code3" placeholder="Enter code for 2000 Lions">
+                </div>
+                <button onclick="updateCodes()" class="update-button">
+                    <i class="fas fa-sync-alt"></i> Update Codes
+                </button>
+            </div>
+        </div>
+
+        <!-- Social Links Management -->
+        <div class="panel-section">
+            <h3>Social Links Management</h3>
+            <div class="social-update">
+                <div class="input-group">
+                    <label><i class="fab fa-twitter"></i> Twitter Link</label>
+                    <input type="text" id="twitterLink" placeholder="https://twitter.com/...">
+                </div>
+                <div class="input-group">
+                    <label><i class="fab fa-instagram"></i> Instagram Link</label>
+                    <input type="text" id="instagramLink" placeholder="https://instagram.com/...">
+                </div>
+                <div class="input-group">
+                    <label><i class="fab fa-telegram"></i> Telegram Link</label>
+                    <input type="text" id="telegramLink" placeholder="https://t.me/...">
+                </div>
+                <button onclick="updateSocialLinks()" class="update-button">
+                    <i class="fas fa-link"></i> Update Social Links
+                </button>
+            </div>
+        </div>
+
+        <!-- Reset Options -->
+        <div class="panel-section">
+            <h3>Reset Management</h3>
+            <div class="reset-options">
+                <button onclick="resetAllClaims()" class="reset-button">
+                    <i class="fas fa-undo"></i> Reset All Claims
+                </button>
+                <button onclick="resetSocialClaims()" class="reset-button">
+                    <i class="fas fa-share-alt"></i> Reset Social Claims Only
+                </button>
+                <button onclick="resetCodeClaims()" class="reset-button">
+                    <i class="fas fa-key"></i> Reset Code Claims Only
+                </button>
+            </div>
+        </div>
+
+        <!-- Task Statistics -->
+        <div class="panel-section">
+            <h3>Task Statistics</h3>
+            <div class="stats-container">
+                <div class="stat-item">
+                    <span>Total Claims Today:</span>
+                    <span id="totalClaimsToday">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Active Users:</span>
+                    <span id="activeUsers">0</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <section class="tasks scrollable">
-        <div class="task-container">
-            <!-- Quiz Tasks -->
-            <div class="task quiz-task" id="quiz1">
-                <div class="task-detail">
-                    <div class="task-image">
-                        <img src="material/images/quiz-icon.png" alt="Quiz" width="50">
-                    </div>
-                    <div>
-                        <h4>What is the maximum supply of Loincoin? <i class="fas fa-lightbulb hint-icon"></i></h4>
-                        <input type="text" class="answer-input" placeholder="Enter answer">
-                    </div>
-                </div>
-                <div class="task-data">
-                    <span class="task-reward">200 🦁</span>
-                    <button class="claim-button" onclick="verifyQuizAnswer(1, '1000000000')">Submit</button>
-                </div>
-                <div class="processing-animation">
-                    <div class="processing-spinner"></div>
-                </div>
-            </div>
-
-            <div class="task quiz-task" id="quiz2">
-                <div class="task-detail">
-                    <div class="task-image">
-                        <img src="material/images/quiz-icon.png" alt="Quiz" width="50">
-                    </div>
-                    <div>
-                        <h4>What is the name of Loincoin's DEX? <i class="fas fa-lightbulb hint-icon"></i></h4>
-                        <input type="text" class="answer-input" placeholder="Enter answer">
-                    </div>
-                </div>
-                <div class="task-data">
-                    <span class="task-reward">300 🦁</span>
-                    <button class="claim-button" onclick="verifyQuizAnswer(2, 'LoinSwap')">Submit</button>
-                </div>
-                <div class="processing-animation">
-                    <div class="processing-spinner"></div>
-                </div>
-            </div>
-
-            <div class="task quiz-task" id="quiz3">
-                <div class="task-detail">
-                    <div class="task-image">
-                        <img src="material/images/quiz-icon.png" alt="Quiz" width="50">
-                    </div>
-                    <div>
-                        <h4>What is Loincoin's governance token symbol? <i class="fas fa-lightbulb hint-icon"></i></h4>
-                        <input type="text" class="answer-input" placeholder="Enter answer">
-                    </div>
-                </div>
-                <div class="task-data">
-                    <span class="task-reward">400 🦁</span>
-                    <button class="claim-button" onclick="verifyQuizAnswer(3, 'LOIN')">Submit</button>
-                </div>
-                <div class="processing-animation">
-                    <div class="processing-spinner"></div>
-                </div>
-            </div>
-
-            <!-- Social Tasks -->
-            <div class="task social-task" id="social1">
-                <div class="task-detail">
-                    <div class="task-image">
-                        <img src="material/images/twitter-icon.png" alt="Twitter" width="50">
-                    </div>
-                    <div>
-                        <h4>Follow & Retweet our Latest Post</h4>
-                        <a href="https://twitter.com/loincoin" target="_blank" class="social-link">@loincoin</a>
-                        <button class="verify-button" onclick="verifySocialTask(1)">Verify Action</button>
-                    </div>
-                </div>
-                <div class="task-data">
-                    <span class="task-reward">250 🦁</span>
-                    <button class="claim-button" disabled>Verify First</button>
-                </div>
-                <div class="processing-animation">
-                    <div class="processing-spinner"></div>
-                </div>
-            </div>
-
-            <div class="task social-task" id="social2">
-                <div class="task-detail">
-                    <div class="task-image">
-                        <img src="material/images/telegram-icon.png" alt="Telegram" width="50">
-                    </div>
-                    <div>
-                        <h4>Join Telegram & Share Invite Link</h4>
-                        <a href="https://t.me/loincoin" target="_blank" class="social-link">Loincoin Community</a>
-                        <button class="verify-button" onclick="verifySocialTask(2)">Verify Action</button>
-                    </div>
-                </div>
-                <div class="task-data">
-                    <span class="task-reward">350 🦁</span>
-                    <button class="claim-button" disabled>Verify First</button>
-                </div>
-                <div class="processing-animation">
-                    <div class="processing-spinner"></div>
-                </div>
-            </div>
-
-            <div class="task social-task" id="social3">
-                <div class="task-detail">
-                    <div class="task-image">
-                        <img src="material/images/discord-icon.png" alt="Discord" width="50">
-                    </div>
-                    <div>
-                        <h4>Join Discord & Invite 3 Friends</h4>
-                        <a href="https://discord.gg/loincoin" target="_blank" class="social-link">Loincoin Discord</a>
-                        <button class="verify-button" onclick="verifySocialTask(3)">Verify Action</button>
-                    </div>
-                </div>
-                <div class="task-data">
-                    <span class="task-reward">450 🦁</span>
-                    <button class="claim-button" disabled>Verify First</button>
-                </div>
-                <div class="processing-animation">
-                    <div class="processing-spinner"></div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- Admin Toggle Button (Add near the bottom nav) -->
+    <button id="adminToggle" onclick="togglePanel()" class="admin-toggle">
+        <i class="fas fa-cog"></i>
+    </button>
 
     <nav class="bottom-nav">
         <a href="home.html" class="nav-item">
             <i class="fas fa-home"></i>
             <span>HOME</span>
+        </a>
+        <a href="leaderboard.html" class="nav-item">
+            <i class="fas fa-trophy"></i>
+            <span>LEADERBOARD</span>
         </a>
         <a href="invite-friends.html" class="nav-item">
             <i class="fas fa-user-friends"></i>
@@ -430,172 +810,319 @@
     </nav>
 
     <script>
-        // User and Task Management
-        let taskState = JSON.parse(localStorage.getItem('taskState') || '{}');
-        let users = JSON.parse(localStorage.getItem('users') || '{}');
-        let currentUser = localStorage.getItem('currentUserId');
-
-        // Initialize user if not exists
-        if (!currentUser) {
-            currentUser = 'user_' + Date.now();
-            localStorage.setItem('currentUserId', currentUser);
+        // Add these functions at the beginning of the script section
+        function isAdmin() {
+            const currentUser = localStorage.getItem('currentUserId');
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            return users[currentUser]?.isAdmin === true;
         }
 
-        if (!users[currentUser]) {
-            users[currentUser] = {
-                username: 'User_' + currentUser.split('_')[1],
-                balance: 0,
-                completedTasks: 0,
-                lastActive: Date.now()
+        // Modify the togglePanel function
+        function togglePanel() {
+            if (!isAdmin()) {
+                alert('Access denied. Admin privileges required.');
+                return;
+            }
+            
+            const panel = document.getElementById('taskUpdatePanel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+            
+            if (panel.style.display === 'block') {
+                loadCurrentValues();
+                updateStats();
+            }
+        }
+
+        // Modify all admin functions to check for admin status
+        function updateCodes() {
+            if (!isAdmin()) return;
+            const codes = {
+                code1: document.getElementById('code1').value,
+                code2: document.getElementById('code2').value,
+                code3: document.getElementById('code3').value,
+                lastUpdate: new Date().getTime()
             };
-            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('uniqueCodes', JSON.stringify(codes));
+            alert('Codes updated successfully!');
         }
 
-        function verifyQuizAnswer(quizId, correctAnswer) {
-            const taskElement = document.getElementById(`quiz${quizId}`);
-            const input = taskElement.querySelector('.answer-input');
-            const button = taskElement.querySelector('.claim-button');
-            const processing = taskElement.querySelector('.processing-animation');
-
-            // Check if task already claimed by current user
-            if (isTaskClaimed(currentUser, `quiz_${quizId}`)) {
-                alert('You have already claimed this reward!');
-                return;
-            }
-
-            if (input.value.trim().toLowerCase() === correctAnswer.toLowerCase()) {
-                processing.classList.add('active');
-                button.disabled = true;
-
-                const rewardAmount = parseInt(taskElement.querySelector('.task-reward').textContent);
-                setTimeout(() => {
-                    processing.classList.remove('active');
-                    input.disabled = true;
-                    button.textContent = 'Claimed';
-                    button.classList.add('claimed');
-                    
-                    // Update user balance and stats
-                    updateUserBalance(currentUser, rewardAmount);
-                    
-                    // Save claim state
-                    saveClaimState(currentUser, `quiz_${quizId}`, rewardAmount);
-                    
-                    // Show success animation
-                    showSuccessAnimation(taskElement);
-                }, 1000);
-            } else {
-                input.style.borderColor = '#ff4444';
-                setTimeout(() => {
-                    input.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-                }, 1000);
-            }
+        function updateSocialLinks() {
+            if (!isAdmin()) return;
+            const links = {
+                twitter: document.getElementById('twitterLink').value,
+                instagram: document.getElementById('instagramLink').value,
+                telegram: document.getElementById('telegramLink').value
+            };
+            localStorage.setItem('socialLinks', JSON.stringify(links));
+            
+            updateSocialButtons(links);
+            alert('Social links updated successfully!');
         }
 
-        function verifySocialTask(taskId) {
-            const taskElement = document.getElementById(`social${taskId}`);
-            const verifyButton = taskElement.querySelector('.verify-button');
-            const claimButton = taskElement.querySelector('.claim-button');
-            const processing = taskElement.querySelector('.processing-animation');
-
-            // Check if task already claimed by current user
-            if (isTaskClaimed(currentUser, `social_${taskId}`)) {
-                alert('You have already claimed this reward!');
-                return;
-            }
-
-            processing.classList.add('active');
-            verifyButton.disabled = true;
-
-            setTimeout(() => {
-                processing.classList.remove('active');
-                verifyButton.textContent = 'Verified';
-                verifyButton.style.background = 'linear-gradient(45deg, #4CAF50, #45a049)';
-                
-                claimButton.disabled = false;
-                claimButton.textContent = 'Claim';
-                const rewardAmount = parseInt(taskElement.querySelector('.task-reward').textContent);
-                
-                claimButton.onclick = () => {
-                    if (isTaskClaimed(currentUser, `social_${taskId}`)) {
-                        alert('You have already claimed this reward!');
-                        return;
+        function resetAllClaims() {
+            if (!isAdmin()) return;
+            if (confirm('Are you sure you want to reset all claims? This will allow users to claim rewards again.')) {
+                const users = JSON.parse(localStorage.getItem('users') || '{}');
+                Object.keys(users).forEach(userId => {
+                    if (users[userId].claims) {
+                        users[userId].claims = {};
                     }
-
-                    processing.classList.add('active');
-                    claimButton.disabled = true;
-                    
-                    setTimeout(() => {
-                        processing.classList.remove('active');
-                        claimButton.textContent = 'Claimed';
-                        claimButton.classList.add('claimed');
-                        
-                        // Update user balance and stats
-                        updateUserBalance(currentUser, rewardAmount);
-                        
-                        // Save claim state
-                        saveClaimState(currentUser, `social_${taskId}`, rewardAmount);
-                        
-                        // Show success animation
-                        showSuccessAnimation(taskElement);
-                    }, 1000);
-                };
-            }, 1000);
+                });
+                localStorage.setItem('users', JSON.stringify(users));
+                alert('All claims have been reset!');
+            }
         }
 
-        function isTaskClaimed(userId, taskKey) {
-            return taskState[`${userId}_${taskKey}`]?.claimed || false;
-        }
+        // Add this to your DOMContentLoaded event listener
+        document.addEventListener('DOMContentLoaded', () => {
+            // Existing balance initialization code...
+            
+            // Hide admin toggle button if not admin
+            const adminToggle = document.getElementById('adminToggle');
+            if (!isAdmin()) {
+                adminToggle.style.display = 'none';
+            }
 
-        function updateUserBalance(userId, amount) {
-            users[userId].balance = (users[userId].balance || 0) + amount;
-            users[userId].completedTasks = (users[userId].completedTasks || 0) + 1;
-            users[userId].lastActive = Date.now();
-            localStorage.setItem('users', JSON.stringify(users));
-        }
+            // Initialize social links
+            const links = JSON.parse(localStorage.getItem('socialLinks') || '{}');
+            updateSocialButtons(links);
 
-        function saveClaimState(userId, taskKey, amount) {
-            const key = `${userId}_${taskKey}`;
-            taskState[key] = {
-                claimed: true,
-                timestamp: Date.now(),
-                reward: amount,
-                userId: userId
-            };
-            localStorage.setItem('taskState', JSON.stringify(taskState));
-        }
+            // Check and update social buttons state
+            const currentUser = localStorage.getItem('currentUserId');
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            
+            if (users[currentUser]?.claims) {
+                const platforms = ['twitter', 'instagram', 'telegram'];
+                platforms.forEach(platform => {
+                    if (users[currentUser].claims[`social_${platform}`]) {
+                        const button = document.querySelector(`.social-task:has(.${platform}-button) .claim-button`);
+                        if (button) {
+                            button.disabled = true;
+                            button.textContent = 'Claimed';
+                            button.classList.add('claimed');
+                        }
+                    }
+                });
+            }
+        });
 
-        function showSuccessAnimation(element) {
-            const success = document.createElement('div');
-            success.className = 'success-animation';
-            success.innerHTML = `
-                <div class="success-icon">✓</div>
-                <div class="success-text">Reward Credited!</div>
-            `;
-            element.appendChild(success);
+        // Basic balance initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = localStorage.getItem('currentUserId');
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            if (users[currentUser]) {
+                document.getElementById('balance').textContent = users[currentUser].balance || 0;
+            }
+        });
+
+        function verifyCode(taskNumber) {
+            const input = document.querySelector(`input[data-task-number="${taskNumber}"]`);
+            const verificationStatus = input.parentElement.querySelector('.verification-status');
+            const claimButton = input.parentElement.parentElement.querySelector('.claim-button');
+            const enteredCode = input.value;
+            
+            verificationStatus.style.width = '0';
+            verificationStatus.style.width = '100%';
             
             setTimeout(() => {
-                success.remove();
+                const codes = JSON.parse(localStorage.getItem('uniqueCodes') || '{}');
+                const isValid = enteredCode === codes[`code${taskNumber}`];
+                
+                if (isValid) {
+                    claimButton.style.display = 'block';
+                } else {
+                    alert('Invalid code!');
+                    verificationStatus.style.width = '0';
+                }
+            }, 3000);
+        }
+
+        function claimReward(taskNumber) {
+            const input = document.querySelector(`input[data-task-number="${taskNumber}"]`);
+            const reward = parseInt(input.dataset.reward);
+            
+            const currentUser = localStorage.getItem('currentUserId');
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            if (users[currentUser]) {
+                users[currentUser].balance = (users[currentUser].balance || 0) + reward;
+                localStorage.setItem('users', JSON.stringify(users));
+                updateBalanceDisplay(); // Update all balance displays
+            }
+
+            const claimButton = input.parentElement.parentElement.querySelector('.claim-button');
+            claimButton.disabled = true;
+            claimButton.textContent = 'Claimed';
+        }
+
+        function claimSocialReward(platform) {
+            const currentUser = localStorage.getItem('currentUserId');
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            
+            // Check if user has clicked follow button
+            if (!users[currentUser]?.socialClicks?.[platform]) {
+                alert('Please follow first before claiming the reward!');
+                return;
+            }
+
+            // Check if already claimed
+            if (users[currentUser]?.claims?.[`social_${platform}`]) {
+                alert('You have already claimed this reward!');
+                return;
+            }
+
+            const button = event.target;
+            button.disabled = true;
+            button.textContent = 'Claimed';
+            button.classList.add('claimed');
+            
+            // Update user's balance and claims
+            if (!users[currentUser].claims) {
+                users[currentUser].claims = {};
+            }
+            users[currentUser].claims[`social_${platform}`] = true;
+            users[currentUser].balance = (users[currentUser].balance || 0) + 50;
+            localStorage.setItem('users', JSON.stringify(users));
+            updateBalanceDisplay();
+
+            // Show success message
+            showSuccessMessage(`Reward claimed for following on ${platform}!`);
+        }
+
+        function loadCurrentValues() {
+            // Load codes from localStorage
+            const codes = JSON.parse(localStorage.getItem('uniqueCodes') || '{}');
+            document.getElementById('code1').value = codes.code1 || '';
+            document.getElementById('code2').value = codes.code2 || '';
+            document.getElementById('code3').value = codes.code3 || '';
+
+            // Load social links from localStorage
+            const links = JSON.parse(localStorage.getItem('socialLinks') || '{}');
+            document.getElementById('twitterLink').value = links.twitter || '';
+            document.getElementById('instagramLink').value = links.instagram || '';
+            document.getElementById('telegramLink').value = links.telegram || '';
+        }
+
+        function updateSocialButtons(links) {
+            const twitterBtn = document.querySelector('.twitter-button');
+            const instagramBtn = document.querySelector('.instagram-button');
+            const telegramBtn = document.querySelector('.telegram-button');
+            
+            if (twitterBtn) twitterBtn.href = links.twitter;
+            if (instagramBtn) instagramBtn.href = links.instagram;
+            if (telegramBtn) telegramBtn.href = links.telegram;
+        }
+
+        // Add this function at the beginning of your script
+        function updateBalanceDisplay() {
+            const currentUser = localStorage.getItem('currentUserId');
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            const balance = users[currentUser]?.balance || 0;
+            
+            // Update all balance displays on the page
+            const balanceElements = document.querySelectorAll('[data-balance-display]');
+            balanceElements.forEach(element => {
+                element.textContent = balance.toLocaleString();
+            });
+        }
+
+        // Add these new functions
+        function handleSocialClick(platform) {
+            // Store that user clicked the follow button
+            const currentUser = localStorage.getItem('currentUserId');
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            
+            if (!users[currentUser].socialClicks) {
+                users[currentUser].socialClicks = {};
+            }
+            
+            users[currentUser].socialClicks[platform] = true;
+            localStorage.setItem('users', JSON.stringify(users));
+
+            // Enable claim button after 5 seconds (simulating follow verification)
+            setTimeout(() => {
+                const claimButton = document.querySelector(`.social-task:has(.${platform}-button) .claim-button`);
+                if (claimButton && !claimButton.classList.contains('claimed')) {
+                    claimButton.disabled = false;
+                }
+            }, 5000);
+        }
+
+        // Add success message function
+        function showSuccessMessage(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-animation';
+            successDiv.innerHTML = `
+                <i class="fas fa-check-circle success-icon"></i>
+                <div class="success-text">${message}</div>
+            `;
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                successDiv.remove();
             }, 2000);
         }
 
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check for previously claimed tasks
-            Object.entries(taskState).forEach(([key, value]) => {
-                if (value.claimed && key.startsWith(currentUser)) {
-                    const [_, type, id] = key.split('_');
-                    const taskElement = document.getElementById(`${type}${id}`);
-                    if (taskElement) {
-                        const button = taskElement.querySelector('.claim-button');
-                        const input = taskElement.querySelector('.answer-input');
-                        if (input) input.disabled = true;
-                        button.textContent = 'Claimed';
-                        button.classList.add('claimed');
-                        button.disabled = true;
+        // Add these new admin functions
+        function resetSocialClaims() {
+            if (!isAdmin()) return;
+            if (confirm('Reset all social media claims?')) {
+                const users = JSON.parse(localStorage.getItem('users') || '{}');
+                Object.keys(users).forEach(userId => {
+                    if (users[userId].claims) {
+                        // Only reset social claims
+                        Object.keys(users[userId].claims).forEach(claim => {
+                            if (claim.startsWith('social_')) {
+                                delete users[userId].claims[claim];
+                            }
+                        });
+                        users[userId].socialClicks = {};
                     }
+                });
+                localStorage.setItem('users', JSON.stringify(users));
+                alert('Social claims reset successfully!');
+                updateStats();
+            }
+        }
+
+        function resetCodeClaims() {
+            if (!isAdmin()) return;
+            if (confirm('Reset all code claims?')) {
+                const users = JSON.parse(localStorage.getItem('users') || '{}');
+                Object.keys(users).forEach(userId => {
+                    if (users[userId].claims) {
+                        // Only reset code claims
+                        Object.keys(users[userId].claims).forEach(claim => {
+                            if (claim.startsWith('code_')) {
+                                delete users[userId].claims[claim];
+                            }
+                        });
+                    }
+                });
+                localStorage.setItem('users', JSON.stringify(users));
+                alert('Code claims reset successfully!');
+                updateStats();
+            }
+        }
+
+        function updateStats() {
+            if (!isAdmin()) return;
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            let totalClaims = 0;
+            let activeUsers = 0;
+
+            Object.values(users).forEach(user => {
+                if (user.claims) {
+                    const today = new Date().toDateString();
+                    const todayClaims = Object.entries(user.claims)
+                        .filter(([_, timestamp]) => new Date(timestamp).toDateString() === today);
+                    totalClaims += todayClaims.length;
+                    if (todayClaims.length > 0) activeUsers++;
                 }
             });
-        });
+
+            document.getElementById('totalClaimsToday').textContent = totalClaims;
+            document.getElementById('activeUsers').textContent = activeUsers;
+        }
     </script>
 </body>
 </html>
